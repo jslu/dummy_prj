@@ -1,3 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sample-app
+  labels:
+    app: sample-app
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    nodePort: 30080
+  selector:
+    app: sample-app
+---
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -14,20 +28,27 @@ spec:
     spec:
       containers:
       - name: sample-app
-        image: boostport/kubernetes-vault-sample-app
+        image: jslu/passenger-dummy:0.0.1
+        ports: 
+        - containerPort: 80
         volumeMounts:
         - name: vault-token
           mountPath: /var/run/secrets/boostport.com
+        - name: dummy-prj-storage
+          mountPath: /ayla/dummy_prj
       initContainers:
       - name: get-vault-token
         image: boostport/kubernetes-vault-init
         imagePullPolicy: Always
         env:
         - name: VAULT_ROLE_ID
-          value: 313b0821-4ff6-1df8-54dd-c3eea5d3b8b1
+          value: 229c5b43-3b9e-94ab-4bd7-ff4d8f0548cc
         volumeMounts:
         - name: vault-token
           mountPath: /var/run/secrets/boostport.com
       volumes:
       - name: vault-token
         emptyDir: {}
+      - name: dummy-prj-storage
+        persistentVolumeClaim:
+          claimName: dummy-prj-pv-claim

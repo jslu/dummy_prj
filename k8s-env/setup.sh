@@ -144,6 +144,15 @@ printf "%s\n\n%s" "$current_rules" "$app_rules" | vault write sys/policy/kuberne
 # Get the app’s role id:
 ROLEID=$(vault read -format=json auth/approle/role/sample-app/role-id | jq -r .data.role_id)
 
+
+# Prepare PersistenVolume and PersistenVolumeClaim
+PERSISTENT_VOLUME="dummy-prj-pv-volume.yaml"
+kubectl apply -f $PERSISTENT_VOLUME
+PERSISTENT_VOLUME_CLAIM="dummy-prj-pv-claim.yaml"
+kubectl apply -f $PERSISTENT_VOLUME_CLAIM
+
+
+
 # Inspect deployments/quick-start/sample-app.yaml and update the role id in the deployment
 
 SAMPLE_APP_DEPLOYMENT="sample-app.yaml"
@@ -162,3 +171,4 @@ kubectl apply -f $SAMPLE_APP_DEPLOYMENT
 printf "\nView the logs using the Kubernetes dashboard or kubectl logs mypod
 and confirm that each pod receive a token. The token and various other
 information related to the token should be logged.\n"
+
