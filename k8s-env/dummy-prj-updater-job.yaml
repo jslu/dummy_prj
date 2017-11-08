@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
       - name: deploybox
-        image: jslu/dummy_prj_updater:0.0.3
+        image: jslu/dummy_prj_updater:0.0.4
         volumeMounts:
         - name: vault-token
           mountPath: /var/run/secrets/boostport.com
