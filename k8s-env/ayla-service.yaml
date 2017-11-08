@@ -28,7 +28,7 @@ spec:
     spec:
       containers:
       - name: ayla-service
-        image: jslu/passenger-dummy:0.0.3
+        image: jslu/passenger-dummy:0.0.4
         ports: 
         - containerPort: 80
         volumeMounts:
