@@ -40,7 +40,7 @@ RUN bundle install
 # Add the rails app
 #ADD . /ayla/dummy_prj
 RUN apt-get update; exit 0
-RUN apt-get install -y jq ecryptfs-utils
+RUN apt-get install -y jq ecryptfs-utils tree
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*  
