@@ -50,8 +50,8 @@ metadata:
 data:
   kubernetes-vault.yml: |-
     vault:
-      addr: http://vault:8200
-      token: ecc48949-ce62-cc0e-1268-df2c92b17b95
+      addr: http://tc-staging.ayla.com.cn:8200
+      token: da50e7e2-6e4d-05c7-42f0-9bbfb59652dd
 
     kubernetes:
       watchNamespace: ${KUBERNETES_NAMESPACE}
