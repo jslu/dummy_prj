@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: deploybox
+spec:
+  template:
+    metadata:
+      name: deploybox
+      annotations:
+        pod.boostport.com/vault-approle: ayla-service
+        pod.boostport.com/vault-init-container: get-vault-token
+    spec:
+      containers:
+      - name: deploybox
+        image: jslu/dummy_prj_updater:0.0.3
+        volumeMounts:
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
+        - name: dummy-prj-storage
+          mountPath: /ayla/dummy_prj
+      restartPolicy: Never
+      initContainers:
+      - name: get-vault-token
+        image: boostport/kubernetes-vault-init
+        imagePullPolicy: Always
+        env:
+        - name: VAULT_ROLE_ID
+          value: b997790b-a129-b0a2-f3ac-35be7c0e9e41
+        volumeMounts:
+        - name: vault-token
+          mountPath: /var/run/secrets/boostport.com
+      volumes:
+      - name: vault-token
+        emptyDir: {}
+      - name: dummy-prj-storage
+        persistentVolumeClaim:
+          claimName: dummy-prj-pv-claim
+  backoffLimit: 4

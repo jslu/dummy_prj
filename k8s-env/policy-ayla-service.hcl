@@ -1,4 +1,4 @@
-path "auth/approle/role/sample-app/secret-id" {
+path "auth/approle/role/ayla-service/secret-id" {
   capabilities = ["update"]
 }
 path "intermediate-ca/issue/kubernetes-vault" {
