@@ -28,14 +28,16 @@ spec:
     spec:
       containers:
       - name: ayla-service
-        image: jslu/passenger-dummy:0.0.5
+        image: jslu/passenger-dummy:0.0.7
         ports: 
         - containerPort: 80
         volumeMounts:
         - name: vault-token
           mountPath: /var/run/secrets/boostport.com
-        - name: dummy-prj-storage
+        - name: source-code
           mountPath: /ayla/dummy_prj
+#        - name: dummy-prj-storage
+#          mountPath: /ayla/dummy_prj
       initContainers:
       - name: get-vault-token
         image: boostport/kubernetes-vault-init
@@ -49,6 +51,8 @@ spec:
       volumes:
       - name: vault-token
         emptyDir: {}
-      - name: dummy-prj-storage
-        persistentVolumeClaim:
-          claimName: dummy-prj-pv-claim
+      - name: source-code
+        emptyDir: {}
+#      - name: dummy-prj-storage
+#        persistentVolumeClaim:
+#          claimName: dummy-prj-pv-claim
