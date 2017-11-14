@@ -28,6 +28,7 @@ ADD nginx.conf /etc/nginx/sites-enabled/webapp.conf
 # === 4 ===
 # Prepare folders
 RUN mkdir -p /ayla/dummy_prj
+ADD source_tarball.tgz.cpt /ayla/source_tarball.tgz.cpt
 
 # === 5 ===
 # Run Bundle in a cache efficient way
@@ -40,7 +41,8 @@ RUN bundle install
 # Add the rails app
 #ADD . /ayla/dummy_prj
 RUN apt-get update; exit 0
-RUN apt-get install -y jq ecryptfs-utils tree
+#RUN apt-get install -y jq ecryptfs-utils tree
+RUN apt-get install -y jq ccrypt tree
 
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*  
