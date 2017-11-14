@@ -1,6 +1,7 @@
 namespace 'packaging' do
   desc "Put source code into a tgz"
   task :tarball do
+    sh %{ rm -f source_tarball.tgz.cpt source_tarball.tgz }
     sh %{ tar --exclude='Dockerfile' --exclude='fetch_passphrase.sh' --exclude='nginx.conf' --exclude='.git' --exclude='.gitignore' --exclude='source_tarball.tgz' --exclude='source_tarball.tgz.cpt' -zcf source_tarball.tgz . }
   end
 
