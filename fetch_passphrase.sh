@@ -1,11 +1,18 @@
 #!/bin/bash
 
-cat /var/run/secrets/boostport.com/vault-token | jq -r .clientToken > /tmp/token.txt
+##### 1. fetch PASSPHRASE from Ayla Vault
+#cat /var/run/secrets/boostport.com/vault-token | jq -r .clientToken > /tmp/token.txt
+#curl -X GET -H"X-VAULT-TOKEN: `cat /var/run/secrets/boostport.com/vault-token | jq -r .clientToken`" "http://tc-staging.ayla.com.cn:8200/v1/secret/ecryptfs-passphrase" > /tmp/passphrase.txt
 
-curl -X GET -H"X-VAULT-TOKEN: `cat /var/run/secrets/boostport.com/vault-token | jq -r .clientToken`" "http://tc-staging.ayla.com.cn:8200/v1/secret/ecryptfs-passphrase" > /tmp/passphrase.txt
+PASSPHRASE=$(curl -X GET -H"X-VAULT-TOKEN: `cat /var/run/secrets/boostport.com/vault-token | jq -r .clientToken`" "http://tc-staging.ayla.com.cn:8200/v1/secret/ecryptfs-passphrase" | jq -r .data.value)
 
-# PASSPHRASE="<passphrase>"
-# echo -n $PASSPHRASE | ecryptfs-add-passphrase		# get the sig into $SIG
-# mount -t ecryptfs -o key=passphrase:passphrase_passwd=$PASSPHRASE,no_sig_cache=yes,verbose=no,ecryptfs_sig=$SIG,ecryptfs_cipher=aes,ecryptfs_key_bytes=16,ecryptfs_passthrough=no,ecryptfs_enable_filename_crypto=no /ayla/dummy_prj
 
+##### 2. decrtyp & extract the source code tarball
+SRC_FILE="/ayla/source_tarball.tgz"
+#/usr/bin/ccdecrypt -K `cat /tmp/passphrase.txt | jq -r .data.value` ${SRC_FILE}.cpt
+/usr/bin/ccdecrypt -K ${PASSPHRASE} ${SRC_FILE}.cpt
+(cd /ayla/dummy_prj/; tar zxf ${SRC_FILE})
+
+
+##### 3. start init, get passenger ready to receive requests
 exec /sbin/my_init
