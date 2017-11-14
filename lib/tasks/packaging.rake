@@ -14,5 +14,11 @@ namespace 'packaging' do
   desc "Generate encrypted tarball"
   task :gen_encrypted_tgz => [:tarball, :encrypt] do
   end
+
+  desc "Make docker image"
+  task :build_docker_image => [:environment, :gen_encrypted_tgz] do
+    sh %{ docker build -t jslu/passenger-dummy:#{Consts::VERSION} . }
+    sh %{ docker push jslu/passenger-dummy:#{Consts::VERSION} }
+  end
 end
 
