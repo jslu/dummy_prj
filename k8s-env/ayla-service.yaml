@@ -50,9 +50,11 @@ spec:
           mountPath: /var/run/secrets/boostport.com
       volumes:
       - name: vault-token
-        emptyDir: {}
+        emptyDir:
+          medium: Memory
       - name: source-code
-        emptyDir: {}
+        emptyDir:
+          medium: Memory
 #      - name: dummy-prj-storage
 #        persistentVolumeClaim:
 #          claimName: dummy-prj-pv-claim
