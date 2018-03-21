@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: vault-tokenreview
+  namespace: default
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: vault-tokenreview
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: vault-tokenreview
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: system:auth-delegator
+  apiGroup: rbac.authorization.k8s.io
