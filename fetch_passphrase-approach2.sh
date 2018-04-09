@@ -5,8 +5,8 @@
 #curl -X GET -H"X-VAULT-TOKEN: `cat /var/run/secrets/boostport.com/vault-token | jq -r .clientToken`" "http://tc-staging.ayla.com.cn:8200/v1/secret/ecryptfs-passphrase" > /tmp/passphrase.txt
 
 VAULT_ADDR='http://tc-staging.ayla.com.cn:8200'
-DEFAULT_ACCOUNT_TOKEN=`cat /var/run/secrets/kubernetes.io/serviceaccount/token`
-VAULT_TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d "{\"role\": \"ayla-service\", \"jwt\": \"${DEFAULT_ACCOUNT_TOKEN}\"}" "${VAULT_ADDR}/v1/auth/kubernetes/login" | jq -r .auth.client_token)
+ACCOUNT_TOKEN_OF_DEFAULT=`cat /var/run/secrets/kubernetes.io/serviceaccount/token`
+VAULT_TOKEN=$(curl -X POST -H 'Content-Type: application/json' -d "{\"role\": \"ayla-service\", \"jwt\": \"${ACCOUNT_TOKEN_OF_DEFAULT}\"}" "${VAULT_ADDR}/v1/auth/kubernetes/login" | jq -r .auth.client_token)
 PASSPHRASE=$(curl -X GET -H"X-VAULT-TOKEN: ${VAULT_TOKEN}" "${VAULT_ADDR}/v1/secret/src-decrypt-pass" | jq -r .data.value)
 
 
